@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,25 +16,3 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/user', function (Request $request) {
     return $request->user();
 });
-
-// Route::post('/login', function (Request $request) {
-//     $email = $request->email;
-//     $password = $request->password;
-
-//     if (Auth::attempt([
-//         'email' => $email,
-//         'password' => $password
-//     ])) {
-//         return response()->json('', 204);
-//     } else {
-//         return response()->json([
-//             'error' => 'invalid_credentials'
-//         ], 403);
-//     }
-// });
-
-Route::middleware(['auth:airlock'])->group(function () {
-    Route::post('logout', 'API\AuthController@logout');
-});
-Route::post('/login', 'API\AuthController@login');
-Route::post('/register', 'API\AuthController@register');
