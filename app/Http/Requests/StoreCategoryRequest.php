@@ -33,11 +33,13 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:3',
+            'parent_id' => 'integer|number'
         ];
     }
 
     public function process()
     {
-        return tap($this->category->create($this->validated()));
+        $category = $this->category->create($this->validated());
+        return $category->first();
     }
 }
