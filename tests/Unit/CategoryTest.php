@@ -19,4 +19,21 @@ class CategoryTest extends TestCase
 
         $this->assertHasManyUsing(Category::class, $parent->subcategories(), 'parent_id');
     }
+
+    /** @test */
+    public function category_with_a_parent_id_are_null()
+    {
+        $categoryA = factory(Category::class)->create();
+        $categoryB = factory(Category::class)->create();
+        $subcategory = factory(Category::class)->create([
+            'parent_id' => $categoryA->id
+        ]);
+
+        $onlyParentCategory = Category::parentCategory()->get();
+
+        $this->assertCount(2, $onlyParentCategory);
+        $this->assertTrue($onlyParentCategory->contains($categoryA));
+        $this->assertTrue($onlyParentCategory->contains($categoryB));
+        $this->assertFalse($onlyParentCategory->contains($subcategory));
+    }
 }
