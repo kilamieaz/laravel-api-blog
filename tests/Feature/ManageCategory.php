@@ -16,7 +16,7 @@ class ManageCategory extends TestCase
         $this->withoutExceptionHandling();
         $this->signIn();
 
-        $category = factory('App\Category')->create([
+        factory('App\Category')->create([
             'name' => 'Category 1',
         ]);
         $response = $this->getJson('categories')->assertStatus(200);
@@ -30,9 +30,12 @@ class ManageCategory extends TestCase
         $this->signIn();
 
         $data = factory('App\Category')->raw();
-        $response = $this->postJson('categories', $data)
+
+        $this->postJson('categories', $data)
         ->assertStatus(200)
-        ->assertJsonStructure(['data' => ['id', 'name', 'created_at', 'updated_at']]);
+        ->assertJsonStructure(['data' => ['id', 'name', 'parent_id', 'created_at', 'updated_at']]);
+
+        $this->assertDatabaseHas('categories', $data);
     }
 
     /** @test */
@@ -46,7 +49,7 @@ class ManageCategory extends TestCase
 
         $response = $this->putJson("categories/$category->id", $attributes)
         ->assertStatus(200)
-        ->assertJsonStructure(['data' => ['id', 'name', 'created_at', 'updated_at']]);
+        ->assertJsonStructure(['data' => ['id', 'name', 'parent_id', 'created_at', 'updated_at']]);
 
         $this->assertDatabaseHas('categories', $attributes);
 
