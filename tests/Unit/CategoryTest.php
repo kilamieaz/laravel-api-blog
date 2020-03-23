@@ -3,14 +3,26 @@
 namespace Tests\Unit;
 
 use App\Category;
-// use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
+// use PHPUnit\Framework\TestCase;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CategoryTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
+
+    /** @test  */
+    public function categories_database_has_expected_columns()
+    {
+        $this->assertTrue(
+            Schema::hasColumns('categories', [
+                'id', 'name', 'parent_id', 'created_at', 'updated_at'
+            ]),
+            1
+        );
+    }
 
     /** @test */
     public function it_has_many_subcategories()
