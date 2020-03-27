@@ -17,6 +17,7 @@ class CreateCategoriesTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('parent_id')->index()->nullable();
             $table->string('name');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

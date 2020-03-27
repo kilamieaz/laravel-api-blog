@@ -4,10 +4,11 @@ namespace App;
 
 use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
-    use UsesUuid;
+    use UsesUuid, SoftDeletes;
 
     protected $fillable = ['name', 'parent_id'];
 
