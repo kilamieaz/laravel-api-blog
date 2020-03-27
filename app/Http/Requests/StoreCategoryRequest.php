@@ -40,6 +40,6 @@ class StoreCategoryRequest extends FormRequest
     public function process()
     {
         $category = $this->category->create($this->validated());
-        return $category->first();
+        return $category->fresh();
     }
 }
