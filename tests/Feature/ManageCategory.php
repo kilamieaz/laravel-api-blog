@@ -33,7 +33,7 @@ class ManageCategory extends TestCase
 
         $this->postJson('categories', $data)
         ->assertStatus(200)
-        ->assertJsonStructure(['data' => ['id', 'name', 'parent_id', 'created_at', 'updated_at']]);
+        ->assertJsonStructure(['data' => ['id', 'name', 'parent_id', 'deleted_at', 'created_at', 'updated_at']]);
 
         $this->assertDatabaseHas('categories', $data);
     }
@@ -49,7 +49,7 @@ class ManageCategory extends TestCase
 
         $response = $this->putJson("categories/$category->id", $attributes)
         ->assertStatus(200)
-        ->assertJsonStructure(['data' => ['id', 'name', 'parent_id', 'created_at', 'updated_at']]);
+        ->assertJsonStructure(['data' => ['id', 'name', 'parent_id', 'deleted_at', 'created_at', 'updated_at']]);
 
         $this->assertDatabaseHas('categories', $attributes);
 
@@ -67,6 +67,8 @@ class ManageCategory extends TestCase
 
         $this->deleteJson("categories/$category->id")->assertStatus(204);
 
-        $this->assertDatabaseMissing('categories', $category->only('id'));
+        $category->refresh();
+
+        $this->assertDatabaseHas('categories', $category->only('deleted_at'));
     }
 }
