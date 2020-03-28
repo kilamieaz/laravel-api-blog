@@ -2,16 +2,16 @@
 
 namespace App\Http\Requests;
 
-use App\Repositories\CategoryRepository;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Blog\Repositories\Category\CategoryInterface;
 
 class StoreCategoryRequest extends FormRequest
 {
-    protected $category = null;
+    protected $repo;
 
-    public function __construct(CategoryRepository $category)
+    public function __construct(CategoryInterface $category)
     {
-        $this->category = $category;
+        $this->repo = $category;
     }
 
     /**
@@ -39,7 +39,7 @@ class StoreCategoryRequest extends FormRequest
 
     public function process()
     {
-        $category = $this->category->create($this->validated());
+        $category = $this->repo->create($this->validated());
         return $category->fresh();
     }
 }

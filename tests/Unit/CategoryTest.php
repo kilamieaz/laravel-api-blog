@@ -18,7 +18,7 @@ class CategoryTest extends TestCase
     {
         $this->assertTrue(
             Schema::hasColumns('categories', [
-                'id', 'name', 'parent_id', 'created_at', 'updated_at'
+                'id', 'name', 'parent_id', 'created_at', 'updated_at', 'deleted_at'
             ]),
             1
         );

@@ -3,14 +3,14 @@
 namespace App\Http\Handlers\Category;
 
 use Illuminate\Http\Request;
-use App\Repositories\CategoryRepository;
 use App\Http\Resources\CategoryResource;
+use App\Blog\Repositories\Category\CategoryInterface;
 
 class IndexCategoryHandler
 {
-    protected $category = null;
+    protected $category;
 
-    public function __construct(CategoryRepository $category)
+    public function __construct(CategoryInterface $category)
     {
         $this->category = $category;
     }
