@@ -3,20 +3,21 @@
 namespace App\Http\Handlers\Auth;
 
 use App\Jobs\CreateUser;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Resources\UserResource;
+use App\Http\Requests\StoreRegisterRequest;
 
 class RegisterHandler
 {
-    public function __invoke(Request $request)
+    public function __invoke(StoreRegisterRequest $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8'],
-        ]);
-        $user = CreateUser::dispatchNow($request->all());
-
-        return new UserResource($user);
+        $response = DB::transaction(function () use ($request) {
+            $user = CreateUser::dispatchNow($request->validated());
+            $token = $user->createToken('auth:login');
+            return [$user, $token];
+        });
+        list($user, $token) = $response;
+        return (new UserResource($user))
+        ->additional(['data' => ['accessToken' => $token->plainTextToken]]);
     }
 }

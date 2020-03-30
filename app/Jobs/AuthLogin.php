@@ -4,16 +4,12 @@ namespace App\Jobs;
 
 use Auth;
 use App\User;
-use Illuminate\Http\Request;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
-class AuthLogin implements ShouldQueue
+class AuthLogin
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, Queueable;
 
     protected $request;
 
@@ -22,7 +18,7 @@ class AuthLogin implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Array $request)
+    public function __construct(array $request)
     {
         $this->request = $request;
     }
@@ -38,6 +34,6 @@ class AuthLogin implements ShouldQueue
         if (!Auth::attempt(['email' => $this->request['email'], 'password' => $this->request['password']])) {
             return response()->json(['error' => 'The credentials provided do not match our records'], 401);
         }
-        return User::whereEmail($this->request['email'])->get();
+        return User::whereEmail($this->request['email'])->first();
     }
 }
