@@ -46,7 +46,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
-        $this->mapHandlersRoutes();
+        $this->mapHandlerApiRoutes();
         //
     }
 
@@ -86,10 +86,11 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapHandlersRoutes()
+    protected function mapHandlerApiRoutes()
     {
-        Route::middleware('web')
+        Route::prefix('api')
+         ->middleware('api')
          ->namespace('App\Http\Handlers')
-         ->group(base_path('routes/handlers.php'));
+         ->group(base_path('routes/handlerApi.php'));
     }
 }
