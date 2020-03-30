@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -16,10 +17,10 @@ class ManageCategory extends TestCase
         $this->withoutExceptionHandling();
         $this->signIn();
 
-        factory('App\Category')->create([
+        factory(Category::class)->create([
             'name' => 'Category 1',
         ]);
-        $response = $this->getJson('categories')->assertStatus(200);
+        $response = $this->getJson(route('categories.index'))->assertStatus(200);
 
         $this->assertEquals('Category 1', $response->json()['data'][0]['name']);
     }
@@ -29,10 +30,10 @@ class ManageCategory extends TestCase
     {
         $this->signIn();
 
-        $data = factory('App\Category')->raw();
+        $data = factory(Category::class)->raw();
 
-        $this->postJson('categories', $data)
-        ->assertStatus(200)
+        $this->postJson(route('categories.store'), $data)
+        ->assertStatus(201)
         ->assertJsonStructure(['data' => ['id', 'name', 'parent_id', 'deleted_at', 'created_at', 'updated_at']]);
 
         $this->assertDatabaseHas('categories', $data);
@@ -45,9 +46,9 @@ class ManageCategory extends TestCase
 
         $attributes = ['name' => 'category changed'];
 
-        $category = factory('App\Category')->create();
+        $category = factory(Category::class)->create();
 
-        $response = $this->putJson("categories/$category->id", $attributes)
+        $response = $this->putJson(route('categories.update', $category->id), $attributes)
         ->assertStatus(200)
         ->assertJsonStructure(['data' => ['id', 'name', 'parent_id', 'deleted_at', 'created_at', 'updated_at']]);
 
@@ -61,11 +62,11 @@ class ManageCategory extends TestCase
     {
         $this->signIn();
 
-        $category = factory('App\Category')->create([
+        $category = factory(Category::class)->create([
             'name' => 'Category 1',
         ]);
 
-        $this->deleteJson("categories/$category->id")->assertStatus(204);
+        $this->deleteJson(route('categories.destroy', $category->id))->assertStatus(204);
 
         $category->refresh();
 
