@@ -1,5 +1,6 @@
 <?php
 
+use App\Category;
 use App\User;
 use Illuminate\Database\Seeder;
 
@@ -21,6 +22,9 @@ class AllSeeder extends Seeder
         $userAdmin->password = bcrypt('password');
         $userAdmin->save();
 
-        factory('App\User', 5)->create();
+        factory(User::class, 5)->create()->each(function ($userCustomer) {
+            //data product
+            factory(Category::class)->create();
+        });
     }
 }
