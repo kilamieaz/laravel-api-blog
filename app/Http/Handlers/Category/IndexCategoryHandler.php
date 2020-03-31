@@ -2,7 +2,6 @@
 
 namespace App\Http\Handlers\Category;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\CategoryResource;
 use App\Blog\Repositories\Category\CategoryInterface;
 
@@ -15,7 +14,7 @@ class IndexCategoryHandler
         $this->category = $category;
     }
 
-    public function __invoke(Request $request)
+    public function __invoke()
     {
         return CategoryResource::collection($this->category->all());
     }

@@ -9,6 +9,6 @@ class StoreCategoryHandler
 {
     public function __invoke(StoreCategoryRequest $formRequest)
     {
-        return new CategoryResource($formRequest->process());
+        return (new CategoryResource($formRequest->process()))->response()->setStatusCode(201);
     }
 }

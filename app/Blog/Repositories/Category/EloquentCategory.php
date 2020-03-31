@@ -2,8 +2,8 @@
 
 namespace App\Blog\Repositories\Category;
 
-use App\Category;
 use App\Blog\Traits\EloquentRepository;
+use Illuminate\Database\Eloquent\Model;
 
 class EloquentCategory implements CategoryInterface
 {
@@ -11,7 +11,7 @@ class EloquentCategory implements CategoryInterface
 
     protected $model;
 
-    public function __construct(Category $category)
+    public function __construct(Model $category)
     {
         $this->model = $category;
     }
